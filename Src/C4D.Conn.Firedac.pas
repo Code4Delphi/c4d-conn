@@ -27,7 +27,9 @@ uses
   Firedac.Phys.SQLiteDef,
   Firedac.Phys.SQLite,
   {$IFDEF MSWINDOWS}
+  {$IF CompilerVersion >= 34.0}
   Firedac.Phys.SQLiteWrapper.Stat,
+  {$IFEND}
   {$ENDIF}
   Firedac.Stan.ExprFuncs,
   C4D.Conn.Interfaces,
@@ -37,7 +39,6 @@ uses
 type
   TC4DConnFiredac = class(TInterfacedObject, IC4DConnection)
   private
-    [weak]
     FC4DConnConfigs: TC4DConnConfigs;
     FConnection: TFDConnection;
     function TestFieldsComponentConnection: IC4DConnection;
@@ -155,10 +156,12 @@ begin
 end;
 
 function TC4DConnFiredac.TestConnection: Boolean;
+var
+  LConnectedOld: Boolean;
 begin
   Self.TestFieldsComponentConnection;
   try
-    var LConnectedOld := FConnection.Connected;
+    LConnectedOld := FConnection.Connected;
     FConnection.Connected := True;
     Result := FConnection.Connected;
     if FConnection.Connected <> LConnectedOld then
@@ -169,10 +172,12 @@ begin
 end;
 
 function TC4DConnFiredac.TestConnectionOnly: Boolean;
+var
+  LConnectedOld: Boolean;
 begin
   Result := False;
   try
-    var LConnectedOld := FConnection.Connected;
+    LConnectedOld := FConnection.Connected;
     FConnection.Connected := True;
     Result := FConnection.Connected;
     if FConnection.Connected <> LConnectedOld then
@@ -182,9 +187,11 @@ begin
 end;
 
 function TC4DConnFiredac.TestFieldsComponentConnection: IC4DConnection;
+var
+  LCamposSemPreenchar: string;
 begin
   Result := Self;
-  var LCamposSemPreenchar := '';
+  LCamposSemPreenchar := '';
   if FC4DConnConfigs.DriverConnection <> TDriverConnection.SQLite then
   begin
     if FC4DConnConfigs.Host.Trim.IsEmpty then

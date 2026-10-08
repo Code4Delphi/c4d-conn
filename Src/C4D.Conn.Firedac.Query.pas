@@ -229,30 +229,36 @@ end;
 
 procedure TC4DConnFiredacQuery.ProcessaListCond;
 var
+  LCond: string;
+  i: Integer;
+  LKey: string;
   LValue: Variant;
 begin
   if FListCond.Count <= 0 then
     Exit;
 
-  var LCond := '';
-  for var i := 0 to Pred(FListCond.Count) do
+  LCond := '';
+  for i := 0 to Pred(FListCond.Count) do
     LCond := LCond + FListCond.Strings[i] + sLineBreak;
 
   LCond := TC4DConnUtils.SQLConfBusca(LCond);
   FQuery.SQL.Add(LCond);
 
-  for var LKey in FListCondParam.Keys do
+  for LKey in FListCondParam.Keys do
     if FListCondParam.TryGetValue(LKey, LValue) then
       Self.AddParam(LKey, LValue);
 end;
 
 procedure TC4DConnFiredacQuery.ProcessaListGroup;
+var
+  LGroup: string;
+  i: Integer;
 begin
   if FListGroup.Count <= 0 then
     Exit;
 
-  var LGroup := '';
-  for var i := 0 to Pred(FListGroup.Count) do
+  LGroup := '';
+  for i := 0 to Pred(FListGroup.Count) do
     LGroup := LGroup + FListGroup.Strings[i].Trim + ', ';
 
   if Pos('group by', LGroup) <= 0 then
@@ -264,12 +270,15 @@ begin
 end;
 
 procedure TC4DConnFiredacQuery.ProcessaListOrder;
+var
+  LOrdem: string;
+  i: Integer;
 begin
   if FListOrder.Count <= 0 then
     Exit;
 
-  var LOrdem := '';
-  for var i := 0 to Pred(FListOrder.Count) do
+  LOrdem := '';
+  for i := 0 to Pred(FListOrder.Count) do
     LOrdem := LOrdem + FListOrder.Strings[i].Trim + ', ';
 
   if Pos(LOrdem, 'order by') <= 0 then
@@ -281,16 +290,20 @@ begin
 end;
 
 procedure TC4DConnFiredacQuery.ProcessaListLimit;
+var
+  i: Integer;
 begin
-  for var i := 0 to Pred(FListLimit.Count) do
+  for i := 0 to Pred(FListLimit.Count) do
     FQuery.SQL.Add(FListLimit.Strings[i]);
 end;
 
 procedure TC4DConnFiredacQuery.CriaCamposDaQuery;
+var
+  i: Integer;
 begin
   Exit;
   FQuery.FieldDefs.Update;
-  for var i := 0 to Pred(FQuery.FieldDefs.Count) do
+  for i := 0 to Pred(FQuery.FieldDefs.Count) do
     FQuery.FieldDefs[i].CreateField(FQuery);
 end;
 

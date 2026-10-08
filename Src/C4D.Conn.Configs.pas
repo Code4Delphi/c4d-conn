@@ -182,9 +182,11 @@ begin
 end;
 
 function TC4DConnConfigs.TestFieldFilling: TC4DConnConfigs;
+var
+  LTemp: string;
 begin
   Result := Self;
-  var LTemp := '';
+  LTemp := '';
   if FDriverConnection <> TDriverConnection.SQLite then
   begin
     if FHost.Trim.IsEmpty then
