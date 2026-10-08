@@ -401,7 +401,7 @@ end;
 
 function TC4DConnFiredacQuery.RecordCountStr(ANumZerosLeft: Integer = 6): string;
 begin
-  Result := FQuery.RecordCount.ToString;
+  Result := FQuery.RecordCount.ToString.PadLeft(ANumZerosLeft, '0');
 end;
 
 //AName = PARA MYSQL E FIREDAC NOME DO CAMPO
