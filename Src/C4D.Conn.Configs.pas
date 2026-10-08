@@ -13,6 +13,7 @@ type
   private
     FComponentOfConnectionExisting: TComponent;
     FComponentConnection: TComponentConnection;
+    FDriverConnection: TDriverConnection;
     FConnectionSingleton: Boolean;
     FHost: string;
     FUserName: string;
@@ -29,6 +30,9 @@ type
     function ComponentConnection: TComponentConnection;
     function ComponentConnectionZeos: TC4DConnConfigs;
     function ComponentConnectionFireDac: TC4DConnConfigs;
+    function DriverConnection: TDriverConnection;
+    function DriverConnectionMySQL: TC4DConnConfigs;
+    function DriverConnectionSQLite: TC4DConnConfigs;
     function ConnectionSingleton: Boolean;
     function ConnectionSingletonON: TC4DConnConfigs;
     function ConnectionSingletonOFF: TC4DConnConfigs;
@@ -59,6 +63,7 @@ begin
   FComponentOfConnectionExisting := nil;
   FConnectionSingleton := True;
   FComponentConnection := TComponentConnection.Empty;
+  FDriverConnection := TDriverConnection.MySQL;
 end;
 
 destructor TC4DConnConfigs.Destroy;
@@ -103,6 +108,23 @@ begin
   if(FComponentConnection <> TComponentConnection.Empty)then
     raise Exception.Create('Componente para conexão já foi informado');
   FComponentConnection := TComponentConnection.FireDac;
+end;
+
+function TC4DConnConfigs.DriverConnection: TDriverConnection;
+begin
+  Result := FDriverConnection;
+end;
+
+function TC4DConnConfigs.DriverConnectionMySQL: TC4DConnConfigs;
+begin
+  Result := Self;
+  FDriverConnection := TDriverConnection.MySQL;
+end;
+
+function TC4DConnConfigs.DriverConnectionSQLite: TC4DConnConfigs;
+begin
+  Result := Self;
+  FDriverConnection := TDriverConnection.SQLite;
 end;
 
 function TC4DConnConfigs.ConnectionSingleton: Boolean;
@@ -194,12 +216,15 @@ var
 begin
   Result := Self;
   LTemp := '';
-  if(Trim(FHost) = '')then
-    LTemp := LTemp + 'Host. ';
-  if(Trim(FUserName) = '')then
-    LTemp := LTemp + 'Usuário. ';
-  if(Trim(FPassword) = '')then
-    LTemp := LTemp + 'Senha. ';
+  if(FDriverConnection <> TDriverConnection.SQLite)then
+  begin
+    if(Trim(FHost) = '')then
+      LTemp := LTemp + 'Host. ';
+    if(Trim(FUserName) = '')then
+      LTemp := LTemp + 'Usuário. ';
+    if(Trim(FPassword) = '')then
+      LTemp := LTemp + 'Senha. ';
+  end;
   if(Trim(FDatabase) = '')then
     LTemp := LTemp + 'Nome banco.';
 

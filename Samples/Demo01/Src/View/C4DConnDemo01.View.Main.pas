@@ -111,18 +111,27 @@ procedure TC4DConnDemo01ViewMain.FormCreate(Sender: TObject);
 begin
   ReportMemoryLeaksOnShutdown := True;
 
+  //BANCO SQLITE EM Samples\Data, CAMINHO RELATIVO AO EXE (Samples\Demo01\Bin)
+  var LDatabase := ExpandFileName(ExtractFilePath(Application.ExeName) + '..\..\Data\base_test.db');
+  if(not FileExists(LDatabase))then
+    raise Exception.Create('Banco de dados não encontrado: ' + LDatabase);
+
   C4DConn
     .Configs
-  //.GetInstance
-  //.ConnectionSingletonON  //DEFAULT: True
+    //.GetInstance
+    //.ConnectionSingletonON  //DEFAULT: True
     .ComponentConnectionFireDac
-  //.ComponentConnectionZeos
-    .Host('127.0.0.1')
-    .UserName('root')
-    .PasswordCript('')
-    .Database('C4D_conn')
-    .Port(0)
-    ;
+    //.ComponentConnectionZeos
+    .DriverConnectionSQLite
+    .Database(LDatabase);
+
+  //CONFIGURACAO PARA MYSQL
+  //.DriverConnectionMySQL  //DEFAULT
+  //.Host('127.0.0.1')
+  //.UserName('root')
+  //.PasswordCript('')
+  //.Database('')
+  //.Port(0);
   //.CarregaDadosDeArqIni(ExtractFilePath(Application.ExeName) + 'servidor.ini');
 
   if(not C4DConn.Connection.TestConnection)then
@@ -187,20 +196,17 @@ begin
     Exit;
   end;
 
-  edtCodigo.Text := FQueryConsulta.FieldByName('Id').AsString;
-  edtNome.Text := FQueryConsulta.FieldByName('Nome').AsString;
-  edtCPF.Text := FQueryConsulta.FieldByName('CPF').AsString;
-  edtFone.Text := FQueryConsulta.FieldByName('Fone').AsString;
-  edtCEP.Text := FQueryConsulta.FieldByName('CEP').AsString;
-  edtAnoNascimento.Text := FQueryConsulta.FieldByName('AnoNascimento').AsString;
+  edtCodigo.Text := FQueryConsulta.FieldByName('id').AsString;
+  edtNome.Text := FQueryConsulta.FieldByName('nome').AsString;
+  edtCPF.Text := FQueryConsulta.FieldByName('cpf').AsString;
+  edtFone.Text := FQueryConsulta.FieldByName('fone').AsString;
+  edtCEP.Text := FQueryConsulta.FieldByName('cep').AsString;
+  edtAnoNascimento.Text := FQueryConsulta.FieldByName('ano_nascimento').AsString;
 
   Self.AtivarCadastro;
 end;
 
 procedure TC4DConnDemo01ViewMain.sbtnAtualizarClick(Sender: TObject);
-//var
-// Field: TIntegerField;
-// i: integer;
 begin
   FQueryConsulta.Text('select *from clientes').Open;
   FQueryConsulta.Open('select *from clientes').Last;
@@ -246,7 +252,7 @@ begin
     Exit;
   end;
 
-  if(Application.MessageBox(Pchar('Confirma exclusão do cliente: ' + FQueryConsulta.FieldByName('Nome').AsString + '?'),
+  if(Application.MessageBox(Pchar('Confirma exclusão do cliente: ' + FQueryConsulta.FieldByName('nome').AsString + '?'),
     'Confirma exclusão?',
     MB_YESNO
     ) = idNo)
@@ -281,7 +287,7 @@ begin
   if(Trim(edtCodigo.Text) = '')then
     LCond := 'limit 0'
   else
-    LCond := 'where(id = "'+edtCodigo.Text+'")limit 1';
+    LCond := 'where(id = ' + Trim(edtCodigo.Text) + ')limit 1';
 
   LQuery := C4DConn.Query;
   LQuery
@@ -291,23 +297,23 @@ begin
   if(Trim(edtCodigo.Text) = '')then
   begin
     LQuery.Append;
-    LQuery.FieldByName('DhCadastro').AsDateTime := Now;
+    LQuery.FieldByName('dh_cadastro').AsDateTime := Now;
   end
   else
   begin
     LQuery.Edit;
   end;
-  LQuery.FieldByName('Nome').AsString := edtNome.Text;
-  LQuery.FieldByName('CPF').AsString := edtCPF.Text;
-  LQuery.FieldByName('Fone').AsString := edtFone.Text;
-  LQuery.FieldByName('CEP').AsString := edtCEP.Text;
-  LQuery.FieldByName('AnoNascimento').AsString := edtAnoNascimento.Text;
+  LQuery.FieldByName('nome').AsString := edtNome.Text;
+  LQuery.FieldByName('cpf').AsString := edtCPF.Text;
+  LQuery.FieldByName('fone').AsString := edtFone.Text;
+  LQuery.FieldByName('cep').AsString := edtCEP.Text;
+  LQuery.FieldByName('ano_nascimento').AsString := edtAnoNascimento.Text;
   LQuery.Post;
 
   Self.DesativarCadastro;
   sbtnAtualizar.Click;
 
-  FQueryConsulta.DataSet.Locate('Id', LQuery.FieldByName('Id').AsInteger, []);
+  FQueryConsulta.DataSet.Locate('id', LQuery.FieldByName('id').AsInteger, []);
 end;
 
 procedure TC4DConnDemo01ViewMain.sbtnNovoClick(Sender: TObject);
@@ -317,7 +323,7 @@ end;
 
 procedure TC4DConnDemo01ViewMain.Button1Click(Sender: TObject);
 begin
-  C4DConn.Query.Add('insert into clientes(Nome, DhCadastro)values(CONCAT("Nome teste: ", CURTIME()), NOW())').ExecSQL;
+  C4DConn.Query.Add('insert into clientes(nome, dh_cadastro)values(''Nome teste: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))').ExecSQL;
   sbtnAtualizar.Click;
 end;
 
@@ -327,16 +333,16 @@ var
 begin
   LQuery := C4DConn.Query;
   LQuery
-    .Add('insert into clientes(Nome, DhCadastro)values(CONCAT("Nome teste: ", CURTIME()), NOW())')
+    .Add('insert into clientes(nome, dh_cadastro)values(''Nome teste: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))')
     .ExecSQL;
 
   LQuery
-    .Text('insert into clientes(Nome, DhCadastro)values(CONCAT("Nome teste: ", CURTIME()), NOW())')
+    .Text('insert into clientes(nome, dh_cadastro)values(''Nome teste: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))')
     .ExecSQL;
 
   LQuery
     .Clear
-    .Add('insert into clientes(Nome, DhCadastro)values(CONCAT("Nome teste: ", CURTIME()), NOW())')
+    .Add('insert into clientes(nome, dh_cadastro)values(''Nome teste: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))')
     .ExecSQL;
 
   sbtnAtualizar.Click;
@@ -349,7 +355,7 @@ end;
 
 procedure TC4DConnDemo01ViewMain.btnInsertDiretoNoExecSQLClick(Sender: TObject);
 begin
-  C4DConn.Query.ExecSQL('insert into clientes(Nome, DhCadastro)values(CONCAT("Nome teste direto pelo ExecSQL: ", CURTIME()), NOW())');
+  C4DConn.Query.ExecSQL('insert into clientes(nome, dh_cadastro)values(''Nome teste direto pelo ExecSQL: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))');
   sbtnAtualizar.Click;
 end;
 

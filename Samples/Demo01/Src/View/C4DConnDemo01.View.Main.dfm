@@ -165,20 +165,20 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
           Top = 39
           Width = 118
           Height = 21
-          EditMask = '99999-99'
-          MaxLength = 8
+          EditMask = '99999-999'
+          MaxLength = 9
           TabOrder = 3
-          Text = '     -  '
+          Text = '     -   '
         end
         object edtFone: TMaskEdit
           Left = 653
           Top = 39
           Width = 115
           Height = 21
-          EditMask = '(99)9999:99999'
+          EditMask = '(99)99999-9999'
           MaxLength = 14
           TabOrder = 4
-          Text = '(  )    :     '
+          Text = '(  )     -    '
         end
         object edtAnoNascimento: TEdit
           Left = 770
@@ -217,7 +217,6 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
           Caption = 'Inserir 1'
           TabOrder = 0
           OnClick = Button1Click
-          ExplicitTop = 5
         end
         object Button2: TButton
           Left = 79
@@ -492,7 +491,6 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
           ParentShowHint = False
           ShowHint = False
           TabOrder = 4
-          Text = ''
         end
         object edtPassword: TEdit
           Left = 212

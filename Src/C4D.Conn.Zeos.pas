@@ -9,7 +9,8 @@ uses
   ZAbstractConnection,
   ZConnection,
   C4D.Conn.Interfaces,
-  C4D.Conn.Configs;
+  C4D.Conn.Configs,
+  C4D.Conn.Types;
 
 type
   TC4DConnZeos = class(TInterfacedObject, IC4DConnection)
@@ -67,7 +68,12 @@ function TC4DConnZeos.LoadConnectionConfig: IC4DConnection;
 begin
   Result := Self;
   FConnection.Connected := False;
-  FConnection.Protocol := 'mysql';
+  case(FC4DConnConfigs.DriverConnection)of
+    TDriverConnection.MySQL:
+      FConnection.Protocol := 'mysql';
+    TDriverConnection.SQLite:
+      FConnection.Protocol := 'sqlite';
+  end;
   FConnection.Database := FC4DConnConfigs.Database;
   FConnection.User := FC4DConnConfigs.UserName;
   FConnection.Password := FC4DConnConfigs.Password;
@@ -147,14 +153,17 @@ var
 begin
   Result := Self;
   LCamposSemPreenchar := '';
-  if(FConnection.HostName.Trim.IsEmpty)then
-    LCamposSemPreenchar := LCamposSemPreenchar + 'Host. ';
+  if(FC4DConnConfigs.DriverConnection <> TDriverConnection.SQLite)then
+  begin
+    if(FConnection.HostName.Trim.IsEmpty)then
+      LCamposSemPreenchar := LCamposSemPreenchar + 'Host. ';
 
-  if(FConnection.User.Trim.IsEmpty)then
-    LCamposSemPreenchar := LCamposSemPreenchar + 'Usuário. ';
+    if(FConnection.User.Trim.IsEmpty)then
+      LCamposSemPreenchar := LCamposSemPreenchar + 'Usuário. ';
 
-  if(FConnection.Password.Trim.IsEmpty)then
-    LCamposSemPreenchar := LCamposSemPreenchar + 'Senha. ';
+    if(FConnection.Password.Trim.IsEmpty)then
+      LCamposSemPreenchar := LCamposSemPreenchar + 'Senha. ';
+  end;
 
   if(Trim(FConnection.Database).IsEmpty)then
     LCamposSemPreenchar := LCamposSemPreenchar + 'Nome banco.';

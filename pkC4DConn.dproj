@@ -121,6 +121,7 @@
         <DCCReference Include="FireDACCommonDriver.dcp"/>
         <DCCReference Include="FireDACCommon.dcp"/>
         <DCCReference Include="FireDACMySQLDriver.dcp"/>
+        <DCCReference Include="FireDACSqliteDriver.dcp"/>
         <DCCReference Include="ZComponent.dcp"/>
         <DCCReference Include="ZDbc.dcp"/>
         <DCCReference Include="ZPlain.dcp"/>

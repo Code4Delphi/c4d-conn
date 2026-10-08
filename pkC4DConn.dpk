@@ -37,6 +37,7 @@ requires
   FireDACCommonDriver,
   FireDACCommon,
   FireDACMySQLDriver,
+  FireDACSqliteDriver,
   ZComponent,
   ZDbc,
   ZPlain,

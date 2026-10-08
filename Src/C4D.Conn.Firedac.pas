@@ -24,8 +24,15 @@ uses
   Firedac.Comp.UI,
   Firedac.Phys.MySQLDef,
   Firedac.Phys.MySQL,
+  Firedac.Phys.SQLiteDef,
+  Firedac.Phys.SQLite,
+  {$IFDEF MSWINDOWS}
+  Firedac.Phys.SQLiteWrapper.Stat,
+  {$ENDIF}
+  Firedac.Stan.ExprFuncs,
   C4D.Conn.Interfaces,
-  C4D.Conn.Configs;
+  C4D.Conn.Configs,
+  C4D.Conn.Types;
 
 type
   TC4DConnFiredac = class(TInterfacedObject, IC4DConnection)
@@ -84,12 +91,24 @@ begin
   Result := Self;
   FConnection.Connected := False;
   FConnection.Params.Clear;
-  FConnection.Params.DriverID := 'MySQL';
-  FConnection.Params.Database := FC4DConnConfigs.Database;
-  FConnection.Params.UserName := FC4DConnConfigs.UserName;
-  FConnection.Params.Password := FC4DConnConfigs.Password;
-  FConnection.Params.Add('Server=' + FC4DConnConfigs.Host);
-  FConnection.Params.Add('Port=' + FC4DConnConfigs.Port.ToString);
+  case(FC4DConnConfigs.DriverConnection)of
+    TDriverConnection.MySQL:
+    begin
+      FConnection.Params.DriverID := 'MySQL';
+      FConnection.Params.Database := FC4DConnConfigs.Database;
+      FConnection.Params.UserName := FC4DConnConfigs.UserName;
+      FConnection.Params.Password := FC4DConnConfigs.Password;
+      FConnection.Params.Add('Server=' + FC4DConnConfigs.Host);
+      FConnection.Params.Add('Port=' + FC4DConnConfigs.Port.ToString);
+    end;
+    TDriverConnection.SQLite:
+    begin
+      FConnection.Params.DriverID := 'SQLite';
+      FConnection.Params.Database := FC4DConnConfigs.Database;
+      FConnection.Params.Add('LockingMode=Normal');
+      FConnection.Params.Add('StringFormat=Unicode');
+    end;
+  end;
 end;
 
 {FConnection.TXOptions.AutoStart  := True;
@@ -170,12 +189,15 @@ var
 begin
   Result := Self;
   LCamposSemPreenchar := '';
-  if(FC4DConnConfigs.Database.Trim.IsEmpty)then
-    LCamposSemPreenchar := LCamposSemPreenchar + 'Host. ';
-  if(FConnection.Params.UserName.Trim.IsEmpty)then
-    LCamposSemPreenchar := LCamposSemPreenchar + 'Usuário. ';
-  if(FConnection.Params.Password.Trim.IsEmpty)then
-    LCamposSemPreenchar := LCamposSemPreenchar + 'Senha. ';
+  if(FC4DConnConfigs.DriverConnection <> TDriverConnection.SQLite)then
+  begin
+    if(FC4DConnConfigs.Database.Trim.IsEmpty)then
+      LCamposSemPreenchar := LCamposSemPreenchar + 'Host. ';
+    if(FConnection.Params.UserName.Trim.IsEmpty)then
+      LCamposSemPreenchar := LCamposSemPreenchar + 'Usuário. ';
+    if(FConnection.Params.Password.Trim.IsEmpty)then
+      LCamposSemPreenchar := LCamposSemPreenchar + 'Senha. ';
+  end;
   if(Trim(FConnection.Params.Database).IsEmpty)then
     LCamposSemPreenchar := LCamposSemPreenchar + 'Nome banco.';
 
