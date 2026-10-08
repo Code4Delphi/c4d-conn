@@ -3,10 +3,6 @@ unit C4D.Conn;
 interface
 
 uses
-  {$IFNDEF LINUX}
-  C4D.Conn.Zeos,
-  C4D.Conn.Zeos.Query,
-  {$ENDIF}
   System.SysUtils,
   System.Classes,
   C4D.Conn.Interfaces,
@@ -93,19 +89,6 @@ begin
       else
         Result := TC4DConnFiredac.New(FC4DConnConfigs);
     end;
-    {$IFNDEF LINUX}
-    TComponentConnection.Zeos:
-    begin
-      if(FC4DConnConfigs.ConnectionSingleton)then
-      begin
-        if(not Assigned(FC4DConnInstance))then
-          FC4DConnInstance := TC4DConnZeos.New(FC4DConnConfigs);
-        Result := FC4DConnInstance;
-      end
-      else
-        Result := TC4DConnZeos.New(FC4DConnConfigs);
-    end;
-    {$ENDIF}
   end;
 end;
 
@@ -124,10 +107,6 @@ begin
   case(FC4DConnConfigs.ComponentConnection)of
     TComponentConnection.Firedac:
       Result := TC4DConnFiredacQuery.New(Self.Connection, ANameQuery);
-    {$IFNDEF LINUX}
-    TComponentConnection.Zeos:
-      Result := TC4DConnZeosQuery.New(Self.Connection, ANameQuery);
-    {$ENDIF}
   end;
 end;
 

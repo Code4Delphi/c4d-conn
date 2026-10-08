@@ -63,7 +63,6 @@ type
     function RecordCount: Integer;
     function RecordCountStr(pNumZerosLeft: Integer = 6): string;
 
-    //AName = PARA MYSQL E ZEOS NOME DA TABELA
     //AName = PARA MYSQL E FIREDAC NOME DO CAMPO
     function GetLastAutoGenValue(const AName: string): Variant;
   end;

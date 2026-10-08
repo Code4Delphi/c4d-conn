@@ -4,7 +4,7 @@ interface
 
 type
   {$SCOPEDENUMS ON}
-  TComponentConnection = (Empty, FireDac {$IFNDEF LINUX}, Zeos {$ENDIF});
+  TComponentConnection = (Empty, FireDac);
   TDriverConnection = (MySQL, SQLite);
   {$SCOPEDENUMS OFF}
 

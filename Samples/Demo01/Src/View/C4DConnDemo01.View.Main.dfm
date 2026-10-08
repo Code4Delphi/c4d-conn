@@ -577,7 +577,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'Estrutura Zeos e FireDac'
+      Caption = 'Estrutura FireDac'
       ImageIndex = 2
       object Memo1: TMemo
         Left = 0
@@ -587,11 +587,6 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
         Align = alClient
         Lines.Strings = (
           
-            ' TZQuery > TZAbstractDataSet > TZAbstractRODataset              ' +
-            '                                           > TDataSet > TCompone' +
-            'nt'
-          ''
-          
             ' TFDQuery > TFDCustomQuery > TFDRdbmsDataSet > TFDAdaptedDataSet' +
             ' > TFDDataSet > TDataSet > TComponent')
         ScrollBars = ssVertical
@@ -600,7 +595,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
     end
   end
   object DataSource1: TDataSource
-    Left = 816
-    Top = 304
+    Left = 616
+    Top = 240
   end
 end

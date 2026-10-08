@@ -121,7 +121,6 @@ begin
     //.GetInstance
     //.ConnectionSingletonON  //DEFAULT: True
     .ComponentConnectionFireDac
-    //.ComponentConnectionZeos
     .DriverConnectionSQLite
     .Database(LDatabase);
 
@@ -374,7 +373,7 @@ begin
   LC4DConn := TC4DConn.New;
   LC4DConn
     .Configs
-  //.ConnectionSingletonOFF  //DEFAULT: True
+    //.ConnectionSingletonOFF  //DEFAULT: True
     .ComponentConnectionFireDac
     .Host(edtHost.Text)
     .UserName(edtUser.Text)

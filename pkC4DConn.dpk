@@ -37,12 +37,7 @@ requires
   FireDACCommonDriver,
   FireDACCommon,
   FireDACMySQLDriver,
-  FireDACSqliteDriver,
-  ZComponent,
-  ZDbc,
-  ZPlain,
-  ZCore,
-  ZParseSql;
+  FireDACSqliteDriver;
 
 contains
   C4D.Conn.Interfaces in 'Src\C4D.Conn.Interfaces.pas',
@@ -50,8 +45,6 @@ contains
   C4D.Conn.Configs in 'Src\C4D.Conn.Configs.pas',
   C4D.Conn in 'Src\C4D.Conn.pas',
   C4D.Conn.Firedac.Query in 'Src\C4D.Conn.Firedac.Query.pas',
-  C4D.Conn.Zeos in 'Src\C4D.Conn.Zeos.pas',
-  C4D.Conn.Zeos.Query in 'Src\C4D.Conn.Zeos.Query.pas',
   C4D.Conn.Types in 'Src\C4D.Conn.Types.pas',
   C4D.Conn.Utils in 'Src\C4D.Conn.Utils.pas';
 

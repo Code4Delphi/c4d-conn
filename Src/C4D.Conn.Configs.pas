@@ -28,7 +28,6 @@ type
     function ComponentOfConnectionExisting(Value: TComponent): TC4DConnConfigs; overload;
     function ComponentOfConnectionExisting: TComponent; overload;
     function ComponentConnection: TComponentConnection;
-    function ComponentConnectionZeos: TC4DConnConfigs;
     function ComponentConnectionFireDac: TC4DConnConfigs;
     function DriverConnection: TDriverConnection;
     function DriverConnectionMySQL: TC4DConnConfigs;
@@ -87,19 +86,6 @@ begin
   if FComponentConnection = TComponentConnection.Empty then
     raise Exception.Create('Componente para conexão com o banco não informado');
   Result := FComponentConnection;
-end;
-
-function TC4DConnConfigs.ComponentConnectionZeos: TC4DConnConfigs;
-begin
-  Result := Self;
-  if(FComponentConnection <> TComponentConnection.Empty)then
-    raise Exception.Create('Componente para conexão já foi informado');
-
-  {$IFNDEF LINUX}
-  FComponentConnection := TComponentConnection.Zeos;
-  {$ELSE}
-  raise Exception.Create('Zeos não pode ser utilizado com aplicações Linux');
-  {$ENDIF}
 end;
 
 function TC4DConnConfigs.ComponentConnectionFireDac: TC4DConnConfigs;
