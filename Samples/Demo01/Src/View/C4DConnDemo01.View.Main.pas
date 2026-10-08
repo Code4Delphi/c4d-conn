@@ -108,11 +108,13 @@ implementation
 
 
 procedure TC4DConnDemo01ViewMain.FormCreate(Sender: TObject);
+var
+  LDatabase: string;
 begin
   ReportMemoryLeaksOnShutdown := True;
 
   //BANCO SQLITE EM Samples\Data, CAMINHO RELATIVO AO EXE (Samples\Demo01\Bin)
-  var LDatabase := ExpandFileName(ExtractFilePath(Application.ExeName) + '..\..\Data\base_test.db');
+  LDatabase := ExpandFileName(ExtractFilePath(Application.ExeName) + '..\..\Data\base_test.db');
   if not FileExists(LDatabase) then
     raise Exception.Create('Banco de dados não encontrado: ' + LDatabase);
 
@@ -266,6 +268,9 @@ begin
 end;
 
 procedure TC4DConnDemo01ViewMain.sbtnGravarClick(Sender: TObject);
+var
+  LCond: string;
+  LQuery: IC4DConnQuery;
 begin
   if Trim(edtNome.Text).IsEmpty then
   begin
@@ -274,13 +279,12 @@ begin
     Exit;
   end;
 
-  var LCond: string;
   if Trim(edtCodigo.Text).IsEmpty then
     LCond := 'limit 0'
   else
     LCond := 'where(id = ' + Trim(edtCodigo.Text) + ')limit 1';
 
-  var LQuery := C4DConn.Query;
+  LQuery := C4DConn.Query;
   LQuery
     .Text('select *from clientes ' + LCond)
     .Open;
@@ -318,8 +322,10 @@ begin
 end;
 
 procedure TC4DConnDemo01ViewMain.Button2Click(Sender: TObject);
+var
+  LQuery: IC4DConnQuery;
 begin
-  var LQuery := C4DConn.Query;
+  LQuery := C4DConn.Query;
   LQuery
     .Add('insert into clientes(nome, dh_cadastro)values(''Nome teste: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))')
     .ExecSQL;
@@ -353,10 +359,13 @@ begin
 end;
 
 procedure TC4DConnDemo01ViewMain.btnCriarNovaConexaoClick(Sender: TObject);
+var
+  LC4DConn: IC4DConn;
+  LQueryConsulta: IC4DConnQuery;
 begin
   mmLog.Lines.Clear;
 
-  var LC4DConn := TC4DConn.New;
+  LC4DConn := TC4DConn.New;
   LC4DConn
     .Configs
     //.ConnectionSingletonOFF  //DEFAULT: True
@@ -370,7 +379,7 @@ begin
   if not LC4DConn.Connection.TestConnection then
     mmLog.Lines.Add('Conexão OFF');
 
-  var LQueryConsulta := LC4DConn.Query;
+  LQueryConsulta := LC4DConn.Query;
   LQueryConsulta.Open('select Id, Nome_empre from parametros');
   while not LQueryConsulta.Eof do
   begin
