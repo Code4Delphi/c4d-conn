@@ -19,10 +19,9 @@ Com ela você configura a conexão em poucas linhas, cria queries sem precisar i
 
 ## Requisitos
 
-- Delphi 10 Seattle ou superior (desenvolvido no Delphi 12 Athens)
+- Delphi 10 Seattle ou superior
 - FireDAC
-- **MySQL**: a biblioteca cliente do MySQL (`libmysql.dll`) com a mesma arquitetura do executável (32 ou 64 bits) na pasta do executável ou no `PATH`
-- **SQLite**: no Windows o SQLite é linkado estaticamente (a partir do Delphi 10.4 via `FireDAC.Phys.SQLiteWrapper.Stat`; nas versões anteriores esse já é o padrão do FireDAC), não sendo necessária nenhuma DLL
+- atualmente pode ser usado com MySQL e SQLite
 
 > Os exemplos deste README usam variáveis inline (`var LQuery := ...`), recurso disponível a partir do Delphi 10.3 Rio. Em versões anteriores, declare as variáveis na seção `var` do método.
 
