@@ -1,0 +1,9 @@
+{
+	"name": "c4d-conn",
+	"description": "",
+	"version": "1.0.0",
+	"homepage": "https://github.com/Code4Delphi/c4d-conn",
+	"mainsrc": "src/",
+	"projects": [],
+	"dependencies": {}
+}

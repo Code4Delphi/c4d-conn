@@ -1,0 +1,57 @@
+package pkC4DConn;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  dbrtl,
+  vclFireDAC,
+  FireDAC,
+  FireDACCommonDriver,
+  FireDACCommon,
+  FireDACMySQLDriver,
+  ZComponent,
+  ZDbc,
+  ZPlain,
+  ZCore,
+  ZParseSql;
+
+contains
+  C4D.Conn.Interfaces in 'Src\C4D.Conn.Interfaces.pas',
+  C4D.Conn.Firedac in 'Src\C4D.Conn.Firedac.pas',
+  C4D.Conn.Configs in 'Src\C4D.Conn.Configs.pas',
+  C4D.Conn in 'Src\C4D.Conn.pas',
+  C4D.Conn.Firedac.Query in 'Src\C4D.Conn.Firedac.Query.pas',
+  C4D.Conn.Zeos in 'Src\C4D.Conn.Zeos.pas',
+  C4D.Conn.Zeos.Query in 'Src\C4D.Conn.Zeos.Query.pas',
+  C4D.Conn.Types in 'Src\C4D.Conn.Types.pas',
+  C4D.Conn.Utils in 'Src\C4D.Conn.Utils.pas';
+
+end.
