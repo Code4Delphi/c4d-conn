@@ -128,10 +128,9 @@ begin
   //.DriverConnectionMySQL  //DEFAULT
   //.Host('127.0.0.1')
   //.UserName('root')
-  //.PasswordCript('')
+  //.Password('')
   //.Database('')
   //.Port(0);
-  //.CarregaDadosDeArqIni(ExtractFilePath(Application.ExeName) + 'servidor.ini');
 
   if not C4DConn.Connection.TestConnection then
     ShowMessage('Conexão OFF');

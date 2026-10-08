@@ -5,7 +5,6 @@ interface
 uses
   System.SysUtils,
   System.Classes,
-  IniFiles,
   C4D.Conn.Types;
 
 type
@@ -20,7 +19,6 @@ type
     FPassword: string;
     FDatabase: string;
     FPort: Integer;
-    function DesCriptografaSenha(AStr: string): string;
   public
     class function New: TC4DConnConfigs;
     constructor Create;
@@ -41,13 +39,11 @@ type
     function UserName(AValue: string): TC4DConnConfigs; overload;
     function Password: string; overload;
     function Password(AValue: string): TC4DConnConfigs; overload;
-    function PasswordCript(AValue: string): TC4DConnConfigs; overload;
     function Database: string; overload;
     function Database(AValue: string): TC4DConnConfigs; overload;
     function Port: Integer; overload;
     function Port(AValue: Integer): TC4DConnConfigs; overload;
     function TestFieldFilling: TC4DConnConfigs;
-    procedure CarregaDadosDeArqIni(ACaminhoArqIni: string);
   end;
 
 implementation
@@ -163,12 +159,6 @@ begin
   FPassword := AValue;
 end;
 
-function TC4DConnConfigs.PasswordCript(AValue: string): TC4DConnConfigs;
-begin
-  Result := Self;
-  FPassword := Self.DesCriptografaSenha(AValue);
-end;
-
 function TC4DConnConfigs.Database: string;
 begin
   Result := FDatabase;
@@ -189,11 +179,6 @@ function TC4DConnConfigs.Port(AValue: Integer): TC4DConnConfigs;
 begin
   Result := Self;
   FPort := AValue;
-end;
-
-function TC4DConnConfigs.DesCriptografaSenha(AStr: string): string;
-begin
-  Result := AStr;
 end;
 
 function TC4DConnConfigs.TestFieldFilling: TC4DConnConfigs;
@@ -217,35 +202,6 @@ begin
 
   if not LTemp.IsEmpty then
     raise Exception.Create('Para realizar a conexão com o banco de dados, os seguintes dados devem ser preenchidos: ' + LTemp);
-end;
-
-procedure TC4DConnConfigs.CarregaDadosDeArqIni(ACaminhoArqIni: string);
-begin
-  if ACaminhoArqIni.Trim.IsEmpty then
-    raise Exception.Create('Arquivo com configurações para acesso ao banco não informado');
-
-  if not FileExists(ACaminhoArqIni) then
-    raise Exception.Create('Arquivo com configurações para acesso ao banco não encontrado: ' + ACaminhoArqIni);
-
-  try
-    var LIniFile := TIniFile.Create(ACaminhoArqIni);
-    try
-      FHost := LIniFile.ReadString('ListaDeHost1', 'Host', FHost);
-      FUserName := LIniFile.ReadString('ListaDeHost1', 'Usuario', FUserName);
-      FPassword := Self.DesCriptografaSenha(LIniFile.ReadString('ListaDeHost1', 'Senha', FPassword));
-      FDatabase := LIniFile.ReadString('ListaDeHost1', 'Banco', FDatabase);
-      FPort := LIniFile.ReadInteger('ListaDeHost1', 'Porta', FPort);
-    finally
-      LIniFile.Free;
-    end;
-
-    if FHost.Trim.IsEmpty or FUserName.Trim.IsEmpty or FDatabase.Trim.IsEmpty then
-      raise Exception.Create('Dados não foram encontrados no arquivo ini (host, usuário e nome do banco)');
-  except on E: Exception do
-    raise Exception.Create('Ocorreu uma exceção ao pegar dados para conexão com o banco de dados ' + sLineBreak +
-      'Arquivo: ' + ACaminhoArqIni + sLineBreak +
-      'Mensagem: ' + E.Message);
-  end;
 end;
 
 end.
