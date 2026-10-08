@@ -113,7 +113,7 @@ begin
 
   //BANCO SQLITE EM Samples\Data, CAMINHO RELATIVO AO EXE (Samples\Demo01\Bin)
   var LDatabase := ExpandFileName(ExtractFilePath(Application.ExeName) + '..\..\Data\base_test.db');
-  if(not FileExists(LDatabase))then
+  if not FileExists(LDatabase) then
     raise Exception.Create('Banco de dados não encontrado: ' + LDatabase);
 
   C4DConn
@@ -133,7 +133,7 @@ begin
   //.Port(0);
   //.CarregaDadosDeArqIni(ExtractFilePath(Application.ExeName) + 'servidor.ini');
 
-  if(not C4DConn.Connection.TestConnection)then
+  if not C4DConn.Connection.TestConnection then
     ShowMessage('Conexão OFF');
 
   FQueryConsulta := C4DConn.Query.DataSource(DataSource1);
@@ -189,7 +189,7 @@ end;
 
 procedure TC4DConnDemo01ViewMain.sbtnAlterarClick(Sender: TObject);
 begin
-  if(FQueryConsulta.IsEmpty)then
+  if FQueryConsulta.IsEmpty then
   begin
     ShowMessage('Selecione um registro para ser alterado');
     Exit;
@@ -245,20 +245,15 @@ end;
 
 procedure TC4DConnDemo01ViewMain.sbtnExcluirClick(Sender: TObject);
 begin
-  if(FQueryConsulta.IsEmpty)then //if(DataSource1.DataSet.IsEmpty)then
+  if FQueryConsulta.IsEmpty then //if(DataSource1.DataSet.IsEmpty)then
   begin
     ShowMessage('Selecione um registro para ser excluído');
     Exit;
   end;
 
-  if(Application.MessageBox(Pchar('Confirma exclusão do cliente: ' + FQueryConsulta.FieldByName('nome').AsString + '?'),
-    'Confirma exclusão?',
-    MB_YESNO
-    ) = idNo)
-  then
-  begin
+  if Application.MessageBox(PChar('Confirma exclusão do cliente: ' + FQueryConsulta.FieldByName('nome').AsString + '?'),
+    'Confirma exclusão?', MB_YESNO) = idNo then
     Exit;
-  end;
 
   //TC4DConnFactory.New.Query.Add('delete from teste where(id = "'+ FQueryConsulta.Query.FieldByName('Id').AsString +'") limit 1').ExecSQL;
   FQueryConsulta.Delete;
@@ -272,36 +267,33 @@ begin
 end;
 
 procedure TC4DConnDemo01ViewMain.sbtnGravarClick(Sender: TObject);
-var
-  LQuery: IC4DConnQuery;
-  LCond: string;
 begin
-  if(Trim(edtNome.Text) = '')then
+  if Trim(edtNome.Text).IsEmpty then
   begin
     ShowMessage('Preencha o campo nome');
     edtNome.SetFocus;
     Exit;
   end;
 
-  if(Trim(edtCodigo.Text) = '')then
+  var LCond: string;
+  if Trim(edtCodigo.Text).IsEmpty then
     LCond := 'limit 0'
   else
     LCond := 'where(id = ' + Trim(edtCodigo.Text) + ')limit 1';
 
-  LQuery := C4DConn.Query;
+  var LQuery := C4DConn.Query;
   LQuery
     .Text('select *from clientes ' + LCond)
     .Open;
 
-  if(Trim(edtCodigo.Text) = '')then
+  if Trim(edtCodigo.Text).IsEmpty then
   begin
     LQuery.Append;
     LQuery.FieldByName('dh_cadastro').AsDateTime := Now;
   end
   else
-  begin
     LQuery.Edit;
-  end;
+
   LQuery.FieldByName('nome').AsString := edtNome.Text;
   LQuery.FieldByName('cpf').AsString := edtCPF.Text;
   LQuery.FieldByName('fone').AsString := edtFone.Text;
@@ -327,10 +319,8 @@ begin
 end;
 
 procedure TC4DConnDemo01ViewMain.Button2Click(Sender: TObject);
-var
-  LQuery: IC4DConnQuery;
 begin
-  LQuery := C4DConn.Query;
+  var LQuery := C4DConn.Query;
   LQuery
     .Add('insert into clientes(nome, dh_cadastro)values(''Nome teste: '' || time(''now'', ''localtime''), datetime(''now'', ''localtime''))')
     .ExecSQL;
@@ -364,13 +354,10 @@ begin
 end;
 
 procedure TC4DConnDemo01ViewMain.btnCriarNovaConexaoClick(Sender: TObject);
-var
-  LC4DConn: IC4DConn;
-  LQueryConsulta: IC4DConnQuery;
 begin
   mmLog.Lines.Clear;
 
-  LC4DConn := TC4DConn.New;
+  var LC4DConn := TC4DConn.New;
   LC4DConn
     .Configs
     //.ConnectionSingletonOFF  //DEFAULT: True
@@ -381,12 +368,12 @@ begin
     .Database(edtDatabase.Text)
     .Port(0);
 
-  if(not LC4DConn.Connection.TestConnection)then
+  if not LC4DConn.Connection.TestConnection then
     mmLog.Lines.Add('Conexão OFF');
 
-  LQueryConsulta := LC4DConn.Query;
+  var LQueryConsulta := LC4DConn.Query;
   LQueryConsulta.Open('select Id, Nome_empre from parametros');
-  while(LQueryConsulta.Eof = False)do
+  while not LQueryConsulta.Eof do
   begin
     mmLog.Lines.Add(LQueryConsulta.FieldByName('Id').AsString + ' - ' +
       LQueryConsulta.FieldByName('Nome_empre').AsString);

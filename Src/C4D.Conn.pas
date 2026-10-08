@@ -59,7 +59,7 @@ end;
 
 function C4DConn: IC4DConn;
 begin
-  if(not Assigned(FInstance))then
+  if not Assigned(FInstance) then
     FInstance := TC4DConn.New;
   Result := FInstance;
 end;
@@ -77,24 +77,23 @@ end;
 
 function TC4DConn.Connection: IC4DConnection;
 begin
-  case(FC4DConnConfigs.ComponentConnection)of
-    TComponentConnection.Firedac:
-    begin
-      if(FC4DConnConfigs.ConnectionSingleton)then
+  case FC4DConnConfigs.ComponentConnection of
+    TComponentConnection.FireDac:
+      if FC4DConnConfigs.ConnectionSingleton then
       begin
-        if(not Assigned(FC4DConnInstance))then
+        if not Assigned(FC4DConnInstance) then
           FC4DConnInstance := TC4DConnFiredac.New(FC4DConnConfigs);
+
         Result := FC4DConnInstance;
       end
       else
         Result := TC4DConnFiredac.New(FC4DConnConfigs);
-    end;
   end;
 end;
 
 function TC4DConn.Query: IC4DConnQuery;
 begin
-  Result := Self.QueryInternal('Query'+ Self.CountNameQuery.ToString);
+  Result := Self.QueryInternal('Query' + Self.CountNameQuery.ToString);
 end;
 
 function TC4DConn.Query(ANameQuery: string): IC4DConnQuery;
@@ -104,8 +103,8 @@ end;
 
 function TC4DConn.QueryInternal(ANameQuery: string): IC4DConnQuery;
 begin
-  case(FC4DConnConfigs.ComponentConnection)of
-    TComponentConnection.Firedac:
+  case FC4DConnConfigs.ComponentConnection of
+    TComponentConnection.FireDac:
       Result := TC4DConnFiredacQuery.New(Self.Connection, ANameQuery);
   end;
 end;

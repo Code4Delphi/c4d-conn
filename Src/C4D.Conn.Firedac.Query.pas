@@ -43,14 +43,14 @@ type
     function Close: IC4DConnQuery;
     function Clear: IC4DConnQuery;
     function CloseClear: IC4DConnQuery;
-    function Add(Value: string): IC4DConnQuery;
-    function AddParam(Param: string; Value: Variant): IC4DConnQuery;
+    function Add(AValue: string): IC4DConnQuery;
+    function AddParam(AParam: string; AValue: Variant): IC4DConnQuery;
     function AddCond(ACond: string): IC4DConnQuery;
-    function AddCondParam(Param: string; Value: Variant): IC4DConnQuery;
+    function AddCondParam(AParam: string; AValue: Variant): IC4DConnQuery;
     function AddGroup(ACond: string): IC4DConnQuery;
     function AddOrder(ACond: string): IC4DConnQuery;
     function AddLimit(ACond: string): IC4DConnQuery;
-    function Text(Value: string): IC4DConnQuery;
+    function Text(AValue: string): IC4DConnQuery;
     function SQL: TStrings;
     function ExecSQL: IC4DConnQuery; overload;
     function ExecSQL(const ASQL: string): IC4DConnQuery; overload;
@@ -58,8 +58,8 @@ type
     function Open(const ASQL: string): IC4DConnQuery; overload;
 
     function DataSet: TDataSet;
-    function DataSource(Value: TDataSource): IC4DConnQuery;
-    function DataSourceMasterDetail(Value: TDataSource): IC4DConnQuery;
+    function DataSource(AValue: TDataSource): IC4DConnQuery;
+    function DataSourceMasterDetail(AValue: TDataSource): IC4DConnQuery;
 
     function Append: IC4DConnQuery;
     function Edit: IC4DConnQuery;
@@ -74,30 +74,30 @@ type
     function Last: IC4DConnQuery;
     function IsEmpty: Boolean;
     function RowsAffected: Integer;
-    function FieldByName(Value: string): TField;
+    function FieldByName(AValue: string): TField;
     function RecNo: Integer;
     function RecordCount: Integer;
-    function RecordCountStr(pNumZerosLeft: Integer = 6): string;
+    function RecordCountStr(ANumZerosLeft: Integer = 6): string;
     function GetLastAutoGenValue(const AName: string): Variant;
   public
-    class function New(AC4DConnection: IC4DConnection; aNameQuery: string): IC4DConnQuery;
-    constructor Create(AC4DConnection: IC4DConnection; aNameQuery: string);
+    class function New(AC4DConnection: IC4DConnection; ANameQuery: string): IC4DConnQuery;
+    constructor Create(AC4DConnection: IC4DConnection; ANameQuery: string);
     destructor Destroy; override;
   end;
 
 implementation
 
-class function TC4DConnFiredacQuery.New(AC4DConnection: IC4DConnection; aNameQuery: string): IC4DConnQuery;
+class function TC4DConnFiredacQuery.New(AC4DConnection: IC4DConnection; ANameQuery: string): IC4DConnQuery;
 begin
-  Result := Self.Create(AC4DConnection, aNameQuery);
+  Result := Self.Create(AC4DConnection, ANameQuery);
 end;
 
-constructor TC4DConnFiredacQuery.Create(AC4DConnection: IC4DConnection; aNameQuery: string);
+constructor TC4DConnFiredacQuery.Create(AC4DConnection: IC4DConnection; ANameQuery: string);
 begin
   FC4DConnection := AC4DConnection;
 
   FQuery := TFDQuery.Create(nil);
-  FQuery.Name := aNameQuery;
+  FQuery.Name := ANameQuery;
   FQuery.FetchOptions.Mode := fmAll;
   FQuery.Connection := TFDConnection(FC4DConnection.Component);
   FQuery.Close;
@@ -145,16 +145,16 @@ begin
   Self.Clear;
 end;
 
-function TC4DConnFiredacQuery.Add(Value: string): IC4DConnQuery;
+function TC4DConnFiredacQuery.Add(AValue: string): IC4DConnQuery;
 begin
   Result := Self;
-  FQuery.SQL.Add(Value);
+  FQuery.SQL.Add(AValue);
 end;
 
-function TC4DConnFiredacQuery.AddParam(Param: string; Value: Variant): IC4DConnQuery;
+function TC4DConnFiredacQuery.AddParam(AParam: string; AValue: Variant): IC4DConnQuery;
 begin
   Result := Self;
-  FQuery.ParamByName(Param).Value := Value;
+  FQuery.ParamByName(AParam).Value := AValue;
 end;
 
 function TC4DConnFiredacQuery.AddCond(ACond: string): IC4DConnQuery;
@@ -163,10 +163,10 @@ begin
   FListCond.Add(ACond);
 end;
 
-function TC4DConnFiredacQuery.AddCondParam(Param: string; Value: Variant): IC4DConnQuery;
+function TC4DConnFiredacQuery.AddCondParam(AParam: string; AValue: Variant): IC4DConnQuery;
 begin
   Result := Self;
-  FListCondParam.Add(Param, Value);
+  FListCondParam.Add(AParam, AValue);
 end;
 
 function TC4DConnFiredacQuery.AddGroup(ACond: string): IC4DConnQuery;
@@ -187,10 +187,10 @@ begin
   FListLimit.Add(ACond);
 end;
 
-function TC4DConnFiredacQuery.Text(Value: string): IC4DConnQuery;
+function TC4DConnFiredacQuery.Text(AValue: string): IC4DConnQuery;
 begin
   Result := Self;
-  FQuery.SQL.Text := Value;
+  FQuery.SQL.Text := AValue;
 end;
 
 function TC4DConnFiredacQuery.ExecSQL: IC4DConnQuery;
@@ -229,83 +229,68 @@ end;
 
 procedure TC4DConnFiredacQuery.ProcessaListCond;
 var
-  i: Integer;
-  LKey: string;
   LValue: Variant;
-  LCond: string;
 begin
-  if(FListCond.Count <= 0)then
+  if FListCond.Count <= 0 then
     Exit;
 
-  LCond := '';
-  for i := 0 to Pred(FListCond.Count)do
+  var LCond := '';
+  for var i := 0 to Pred(FListCond.Count) do
     LCond := LCond + FListCond.Strings[i] + sLineBreak;
 
   LCond := TC4DConnUtils.SQLConfBusca(LCond);
   FQuery.SQL.Add(LCond);
 
-  for LKey in FListCondParam.Keys do
-  begin
-    if(FListCondParam.TryGetValue(LKey, LValue))then
+  for var LKey in FListCondParam.Keys do
+    if FListCondParam.TryGetValue(LKey, LValue) then
       Self.AddParam(LKey, LValue);
-  end;
 end;
 
 procedure TC4DConnFiredacQuery.ProcessaListGroup;
-var
-  i: Integer;
-  LGroup: string;
 begin
-  if(FListGroup.Count <= 0)then
+  if FListGroup.Count <= 0 then
     Exit;
 
-  LGroup := '';
-  for i := 0 to Pred(FListGroup.Count)do
+  var LGroup := '';
+  for var i := 0 to Pred(FListGroup.Count) do
     LGroup := LGroup + FListGroup.Strings[i].Trim + ', ';
 
-  if(pos(LGroup, 'group by') <= 0)then
+  if Pos('group by', LGroup) <= 0 then
     LGroup := 'group by ' + LGroup;
 
   LGroup := LGroup.Trim;
-  System.Delete(LGroup, Length(LGroup), 1);
+  System.Delete(LGroup, LGroup.Length, 1);
   FQuery.SQL.Add(LGroup);
 end;
 
 procedure TC4DConnFiredacQuery.ProcessaListOrder;
-var
-  i: Integer;
-  LOrdem: string;
 begin
-  if(FListOrder.Count <= 0)then
+  if FListOrder.Count <= 0 then
     Exit;
 
-  LOrdem := '';
-  for i := 0 to Pred(FListOrder.Count)do
+  var LOrdem := '';
+  for var i := 0 to Pred(FListOrder.Count) do
     LOrdem := LOrdem + FListOrder.Strings[i].Trim + ', ';
 
-  if(pos(LOrdem, 'order by') <= 0)then
+  if Pos(LOrdem, 'order by') <= 0 then
     LOrdem := 'order by ' + LOrdem;
 
   LOrdem := LOrdem.Trim;
-  System.Delete(LOrdem, Length(LOrdem), 1);
+  System.Delete(LOrdem, LOrdem.Length, 1);
   FQuery.SQL.Add(LOrdem);
 end;
 
 procedure TC4DConnFiredacQuery.ProcessaListLimit;
-var
-  i: Integer;
 begin
-  for i := 0 to Pred(FListLimit.Count)do
+  for var i := 0 to Pred(FListLimit.Count) do
     FQuery.SQL.Add(FListLimit.Strings[i]);
 end;
 
 procedure TC4DConnFiredacQuery.CriaCamposDaQuery;
-var
-  i: Integer;
 begin
   Exit;
   FQuery.FieldDefs.Update;
-  for i := 0 to FQuery.FieldDefs.Count - 1 do
+  for var i := 0 to Pred(FQuery.FieldDefs.Count) do
     FQuery.FieldDefs[i].CreateField(FQuery);
 end;
 
@@ -314,16 +299,16 @@ begin
   Result := FQuery;
 end;
 
-function TC4DConnFiredacQuery.DataSource(Value: TDataSource): IC4DConnQuery;
+function TC4DConnFiredacQuery.DataSource(AValue: TDataSource): IC4DConnQuery;
 begin
   Result := Self;
-  Value.DataSet := FQuery;
+  AValue.DataSet := FQuery;
 end;
 
-function TC4DConnFiredacQuery.DataSourceMasterDetail(Value: TDataSource): IC4DConnQuery;
+function TC4DConnFiredacQuery.DataSourceMasterDetail(AValue: TDataSource): IC4DConnQuery;
 begin
   Result := Self;
-  FQuery.MasterSource := Value;
+  FQuery.MasterSource := AValue;
 end;
 
 function TC4DConnFiredacQuery.Append: IC4DConnQuery;
@@ -399,9 +384,9 @@ begin
   Result := FQuery.SQL;
 end;
 
-function TC4DConnFiredacQuery.FieldByName(Value: string): TField;
+function TC4DConnFiredacQuery.FieldByName(AValue: string): TField;
 begin
-  Result := FQuery.FieldByName(Value);
+  Result := FQuery.FieldByName(AValue);
 end;
 
 function TC4DConnFiredacQuery.RecNo: Integer;
@@ -414,7 +399,7 @@ begin
   Result := FQuery.RecordCount;
 end;
 
-function TC4DConnFiredacQuery.RecordCountStr(pNumZerosLeft: Integer = 6): string;
+function TC4DConnFiredacQuery.RecordCountStr(ANumZerosLeft: Integer = 6): string;
 begin
   Result := FQuery.RecordCount.ToString;
 end;
@@ -424,9 +409,8 @@ function TC4DConnFiredacQuery.GetLastAutoGenValue(const AName: string): Variant;
 begin
   try
     Result := FQuery.Connection.GetLastAutoGenValue(AName);
-  except
-    on E: Exception do
-      raise Exception.Create('Não foi possível recuperar o último código/id inserido no banco de dados: ' + E.Message);
+  except on E: Exception do
+    raise Exception.Create('Não foi possível recuperar o último código/id inserido no banco de dados: ' + E.Message);
   end;
 end;
 

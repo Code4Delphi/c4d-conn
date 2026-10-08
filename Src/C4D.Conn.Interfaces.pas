@@ -27,14 +27,14 @@ type
     function Close: IC4DConnQuery;
     function Clear: IC4DConnQuery;
     function CloseClear: IC4DConnQuery;
-    function Add(Value: string): IC4DConnQuery;
-    function AddParam(Param: string; Value: Variant): IC4DConnQuery;
+    function Add(AValue: string): IC4DConnQuery;
+    function AddParam(AParam: string; AValue: Variant): IC4DConnQuery;
     function AddCond(ACond: string): IC4DConnQuery;
-    function AddCondParam(Param: string; Value: Variant): IC4DConnQuery;
+    function AddCondParam(AParam: string; AValue: Variant): IC4DConnQuery;
     function AddGroup(ACond: string): IC4DConnQuery;
     function AddOrder(ACond: string): IC4DConnQuery;
     function AddLimit(ACond: string): IC4DConnQuery;
-    function Text(Value: string): IC4DConnQuery;
+    function Text(AValue: string): IC4DConnQuery;
     function SQL: TStrings;
     function ExecSQL: IC4DConnQuery; overload;
     function ExecSQL(const ASQL: string): IC4DConnQuery; overload;
@@ -42,8 +42,8 @@ type
     function Open(const ASQL: string): IC4DConnQuery; overload;
 
     function DataSet: TDataSet;
-    function DataSource(Valeu: TDataSource): IC4DConnQuery;
-    function DataSourceMasterDetail(Value: TDataSource): IC4DConnQuery;
+    function DataSource(AValue: TDataSource): IC4DConnQuery;
+    function DataSourceMasterDetail(AValue: TDataSource): IC4DConnQuery;
 
     function Append: IC4DConnQuery;
     function Edit: IC4DConnQuery;
@@ -58,10 +58,10 @@ type
     function Last: IC4DConnQuery;
     function IsEmpty: Boolean;
     function RowsAffected: Integer;
-    function FieldByName(Value: string): TField;
+    function FieldByName(AValue: string): TField;
     function RecNo: Integer;
     function RecordCount: Integer;
-    function RecordCountStr(pNumZerosLeft: Integer = 6): string;
+    function RecordCountStr(ANumZerosLeft: Integer = 6): string;
 
     //AName = PARA MYSQL E FIREDAC NOME DO CAMPO
     function GetLastAutoGenValue(const AName: string): Variant;
@@ -72,7 +72,7 @@ type
     function Configs: TC4DConnConfigs;
     function Connection: IC4DConnection;
     function Query: IC4DConnQuery; overload;
-    function Query(aNameQuery: string): IC4DConnQuery; overload;
+    function Query(ANameQuery: string): IC4DConnQuery; overload;
   end;
 
 implementation

@@ -19,27 +19,25 @@ class function TC4DConnUtils.SQLConfBusca(ASql: string): string;
 begin
   Result := ASql.Trim;
 
-  if(Result.IsEmpty)then
+  if Result.IsEmpty then
     Exit;
 
-  if(copy(Result, 1, 3) = 'and')then
+  if Copy(Result, 1, 3) = 'and' then
   begin
     Delete(Result, 1, 3);
-    Result := 'where '+ Result;
+    Result := 'where ' + Result;
   end
-  else if(copy(Result, 1, 2) = 'or')then
+  else if Copy(Result, 1, 2) = 'or' then
   begin
     Delete(Result, 1, 2);
-    Result := 'where '+ Result;
+    Result := 'where ' + Result;
   end
-  else if(copy(Result, 1, 5) <> 'where')
-    and(copy(Result, 1, 5) <> 'limit')
-    and(copy(Result, 1, 8) <> 'order by')
-    and(copy(Result, 1, 8) <> 'group by')
+  else if (Copy(Result, 1, 5) <> 'where')
+    and (Copy(Result, 1, 5) <> 'limit')
+    and (Copy(Result, 1, 8) <> 'order by')
+    and (Copy(Result, 1, 8) <> 'group by')
   then
-  begin
-    Result := 'where '+ Result;
-  end;
+    Result := 'where ' + Result;
 
   Result := Self.SQLTratar(Result) + ' ';
 end;

@@ -20,12 +20,12 @@ type
     FPassword: string;
     FDatabase: string;
     FPort: Integer;
-    function DesCriptografaSenha(pStr: string): string;
+    function DesCriptografaSenha(AStr: string): string;
   public
     class function New: TC4DConnConfigs;
     constructor Create;
     destructor Destroy; override;
-    function ComponentOfConnectionExisting(Value: TComponent): TC4DConnConfigs; overload;
+    function ComponentOfConnectionExisting(AValue: TComponent): TC4DConnConfigs; overload;
     function ComponentOfConnectionExisting: TComponent; overload;
     function ComponentConnection: TComponentConnection;
     function ComponentConnectionFireDac: TC4DConnConfigs;
@@ -36,18 +36,18 @@ type
     function ConnectionSingletonON: TC4DConnConfigs;
     function ConnectionSingletonOFF: TC4DConnConfigs;
     function Host: string; overload;
-    function Host(Value: string): TC4DConnConfigs; overload;
+    function Host(AValue: string): TC4DConnConfigs; overload;
     function UserName: string; overload;
-    function UserName(Value: string): TC4DConnConfigs; overload;
+    function UserName(AValue: string): TC4DConnConfigs; overload;
     function Password: string; overload;
-    function Password(Value: string): TC4DConnConfigs; overload;
-    function PasswordCript(Value: string): TC4DConnConfigs; overload;
+    function Password(AValue: string): TC4DConnConfigs; overload;
+    function PasswordCript(AValue: string): TC4DConnConfigs; overload;
     function Database: string; overload;
-    function Database(Value: string): TC4DConnConfigs; overload;
+    function Database(AValue: string): TC4DConnConfigs; overload;
     function Port: Integer; overload;
-    function Port(Value: Integer): TC4DConnConfigs; overload;
+    function Port(AValue: Integer): TC4DConnConfigs; overload;
     function TestFieldFilling: TC4DConnConfigs;
-    procedure CarregaDadosDeArqIni(pCaminhoArqIni: string);
+    procedure CarregaDadosDeArqIni(ACaminhoArqIni: string);
   end;
 
 implementation
@@ -75,10 +75,10 @@ begin
   Result := FComponentOfConnectionExisting;
 end;
 
-function TC4DConnConfigs.ComponentOfConnectionExisting(Value: TComponent): TC4DConnConfigs;
+function TC4DConnConfigs.ComponentOfConnectionExisting(AValue: TComponent): TC4DConnConfigs;
 begin
   Result := Self;
-  FComponentOfConnectionExisting := Value;
+  FComponentOfConnectionExisting := AValue;
 end;
 
 function TC4DConnConfigs.ComponentConnection: TComponentConnection;
@@ -91,7 +91,7 @@ end;
 function TC4DConnConfigs.ComponentConnectionFireDac: TC4DConnConfigs;
 begin
   Result := Self;
-  if(FComponentConnection <> TComponentConnection.Empty)then
+  if FComponentConnection <> TComponentConnection.Empty then
     raise Exception.Create('Componente para conexão já foi informado');
   FComponentConnection := TComponentConnection.FireDac;
 end;
@@ -135,10 +135,10 @@ begin
   Result := FHost;
 end;
 
-function TC4DConnConfigs.Host(Value: string): TC4DConnConfigs;
+function TC4DConnConfigs.Host(AValue: string): TC4DConnConfigs;
 begin
   Result := Self;
-  FHost := Value;
+  FHost := AValue;
 end;
 
 function TC4DConnConfigs.UserName: string;
@@ -146,10 +146,10 @@ begin
   Result := FUserName;
 end;
 
-function TC4DConnConfigs.UserName(Value: string): TC4DConnConfigs;
+function TC4DConnConfigs.UserName(AValue: string): TC4DConnConfigs;
 begin
   Result := Self;
-  FUserName := Value;
+  FUserName := AValue;
 end;
 
 function TC4DConnConfigs.Password: string;
@@ -157,16 +157,16 @@ begin
   Result := FPassword;
 end;
 
-function TC4DConnConfigs.Password(Value: string): TC4DConnConfigs;
+function TC4DConnConfigs.Password(AValue: string): TC4DConnConfigs;
 begin
   Result := Self;
-  FPassword := Value;
+  FPassword := AValue;
 end;
 
-function TC4DConnConfigs.PasswordCript(Value: string): TC4DConnConfigs;
+function TC4DConnConfigs.PasswordCript(AValue: string): TC4DConnConfigs;
 begin
   Result := Self;
-  FPassword := Self.DesCriptografaSenha(Value);
+  FPassword := Self.DesCriptografaSenha(AValue);
 end;
 
 function TC4DConnConfigs.Database: string;
@@ -174,10 +174,10 @@ begin
   Result := FDatabase;
 end;
 
-function TC4DConnConfigs.Database(Value: string): TC4DConnConfigs;
+function TC4DConnConfigs.Database(AValue: string): TC4DConnConfigs;
 begin
   Result := Self;
-  FDatabase := Value;
+  FDatabase := AValue;
 end;
 
 function TC4DConnConfigs.Port: Integer;
@@ -185,51 +185,50 @@ begin
   Result := FPort;
 end;
 
-function TC4DConnConfigs.Port(Value: Integer): TC4DConnConfigs;
+function TC4DConnConfigs.Port(AValue: Integer): TC4DConnConfigs;
 begin
   Result := Self;
-  FPort := Value;
+  FPort := AValue;
 end;
 
-function TC4DConnConfigs.DesCriptografaSenha(pStr: string): string;
+function TC4DConnConfigs.DesCriptografaSenha(AStr: string): string;
 begin
-  Result := pStr;
+  Result := AStr;
 end;
 
 function TC4DConnConfigs.TestFieldFilling: TC4DConnConfigs;
-var
-  LTemp: string;
 begin
   Result := Self;
-  LTemp := '';
-  if(FDriverConnection <> TDriverConnection.SQLite)then
+  var LTemp := '';
+  if FDriverConnection <> TDriverConnection.SQLite then
   begin
-    if(Trim(FHost) = '')then
+    if FHost.Trim.IsEmpty then
       LTemp := LTemp + 'Host. ';
-    if(Trim(FUserName) = '')then
+
+    if FUserName.Trim.IsEmpty then
       LTemp := LTemp + 'Usuário. ';
-    if(Trim(FPassword) = '')then
+
+    if FPassword.Trim.IsEmpty then
       LTemp := LTemp + 'Senha. ';
   end;
-  if(Trim(FDatabase) = '')then
+
+  if FDatabase.Trim.IsEmpty then
     LTemp := LTemp + 'Nome banco.';
 
-  if(LTemp <> '')then
+  if not LTemp.IsEmpty then
     raise Exception.Create('Para realizar a conexão com o banco de dados, os seguintes dados devem ser preenchidos: ' + LTemp);
 end;
 
-procedure TC4DConnConfigs.CarregaDadosDeArqIni(pCaminhoArqIni: string);
-var
-  LIniFile: TIniFile;
+procedure TC4DConnConfigs.CarregaDadosDeArqIni(ACaminhoArqIni: string);
 begin
-  if(Trim(pCaminhoArqIni) = EmptyStr)then
+  if ACaminhoArqIni.Trim.IsEmpty then
     raise Exception.Create('Arquivo com configurações para acesso ao banco não informado');
 
-  if(FileExists(pCaminhoArqIni) = False)then
-    raise Exception.Create('Arquivo com configurações para acesso ao banco não encontrado: ' + pCaminhoArqIni);
+  if not FileExists(ACaminhoArqIni) then
+    raise Exception.Create('Arquivo com configurações para acesso ao banco não encontrado: ' + ACaminhoArqIni);
 
   try
-    LIniFile := TIniFile.Create(pCaminhoArqIni);
+    var LIniFile := TIniFile.Create(ACaminhoArqIni);
     try
       FHost := LIniFile.ReadString('ListaDeHost1', 'Host', FHost);
       FUserName := LIniFile.ReadString('ListaDeHost1', 'Usuario', FUserName);
@@ -240,14 +239,12 @@ begin
       LIniFile.Free;
     end;
 
-    if(Trim(FHost) = '')or(Trim(FUserName) = '')or(Trim(FDatabase) = '')then
+    if FHost.Trim.IsEmpty or FUserName.Trim.IsEmpty or FDatabase.Trim.IsEmpty then
       raise Exception.Create('Dados não foram encontrados no arquivo ini (host, usuário e nome do banco)');
-
-  except
-    on E: Exception do
-      raise Exception.Create('Ocorreu uma exceção ao pegar dados para conexão com o banco de dados ' + sLineBreak +
-        'Arquivo: ' + pCaminhoArqIni + sLineBreak +
-        'Mensagem: ' + E.Message);
+  except on E: Exception do
+    raise Exception.Create('Ocorreu uma exceção ao pegar dados para conexão com o banco de dados ' + sLineBreak +
+      'Arquivo: ' + ACaminhoArqIni + sLineBreak +
+      'Mensagem: ' + E.Message);
   end;
 end;
 

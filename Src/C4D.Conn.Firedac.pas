@@ -67,7 +67,7 @@ end;
 constructor TC4DConnFiredac.Create(AC4DConnConfigs: TC4DConnConfigs);
 begin
   FC4DConnConfigs := AC4DConnConfigs;
-  if(FC4DConnConfigs.ComponentOfConnectionExisting <> nil)then //(TC4DConnConfigs.GetInstance.ComponentOfConnectionExisting <> nil)then
+  if FC4DConnConfigs.ComponentOfConnectionExisting <> nil then //(TC4DConnConfigs.GetInstance.ComponentOfConnectionExisting <> nil)then
     FConnection := TFDConnection(FC4DConnConfigs.ComponentOfConnectionExisting)
   else
   begin
@@ -78,7 +78,7 @@ end;
 
 destructor TC4DConnFiredac.Destroy;
 begin
-  if(FC4DConnConfigs.ComponentOfConnectionExisting = nil)then
+  if FC4DConnConfigs.ComponentOfConnectionExisting = nil then
   begin
     FConnection.Connected := False;
     FreeAndNil(FConnection);
@@ -91,7 +91,7 @@ begin
   Result := Self;
   FConnection.Connected := False;
   FConnection.Params.Clear;
-  case(FC4DConnConfigs.DriverConnection)of
+  case FC4DConnConfigs.DriverConnection of
     TDriverConnection.MySQL:
     begin
       FConnection.Params.DriverID := 'MySQL';
@@ -138,71 +138,70 @@ end;
 
 function TC4DConnFiredac.StartTransaction: IC4DConnection;
 begin
+  Result := Self;
   FConnection.StartTransaction;
 end;
 
 function TC4DConnFiredac.Commit: IC4DConnection;
 begin
+  Result := Self;
   FConnection.Commit;
 end;
 
 function TC4DConnFiredac.Rollback: IC4DConnection;
 begin
+  Result := Self;
   FConnection.Rollback;
 end;
 
 function TC4DConnFiredac.TestConnection: Boolean;
-var
-  LConnectedOld: Boolean;
 begin
   Self.TestFieldsComponentConnection;
   try
-    LConnectedOld := FConnection.Connected;
+    var LConnectedOld := FConnection.Connected;
     FConnection.Connected := True;
     Result := FConnection.Connected;
-    if(FConnection.Connected <> LConnectedOld)then
+    if FConnection.Connected <> LConnectedOld then
       FConnection.Connected := LConnectedOld;
-  except
-    on E: exception do
-      raise exception.Create('Conexão não pode ser realizada: ' + E.Message);
+  except on E: Exception do
+    raise Exception.Create('Conexão não pode ser realizada: ' + E.Message);
   end;
 end;
 
 function TC4DConnFiredac.TestConnectionOnly: Boolean;
-var
-  LConnectedOld: Boolean;
 begin
   Result := False;
   try
-    LConnectedOld := FConnection.Connected;
+    var LConnectedOld := FConnection.Connected;
     FConnection.Connected := True;
     Result := FConnection.Connected;
-    if(FConnection.Connected <> LConnectedOld)then
+    if FConnection.Connected <> LConnectedOld then
       FConnection.Connected := LConnectedOld;
   except
   end;
 end;
 
 function TC4DConnFiredac.TestFieldsComponentConnection: IC4DConnection;
-var
-  LCamposSemPreenchar: string;
 begin
   Result := Self;
-  LCamposSemPreenchar := '';
-  if(FC4DConnConfigs.DriverConnection <> TDriverConnection.SQLite)then
+  var LCamposSemPreenchar := '';
+  if FC4DConnConfigs.DriverConnection <> TDriverConnection.SQLite then
   begin
-    if(FC4DConnConfigs.Database.Trim.IsEmpty)then
+    if FC4DConnConfigs.Host.Trim.IsEmpty then
       LCamposSemPreenchar := LCamposSemPreenchar + 'Host. ';
-    if(FConnection.Params.UserName.Trim.IsEmpty)then
+
+    if FConnection.Params.UserName.Trim.IsEmpty then
       LCamposSemPreenchar := LCamposSemPreenchar + 'Usuário. ';
-    if(FConnection.Params.Password.Trim.IsEmpty)then
+
+    if FConnection.Params.Password.Trim.IsEmpty then
       LCamposSemPreenchar := LCamposSemPreenchar + 'Senha. ';
   end;
-  if(Trim(FConnection.Params.Database).IsEmpty)then
+
+  if Trim(FConnection.Params.Database).IsEmpty then
     LCamposSemPreenchar := LCamposSemPreenchar + 'Nome banco.';
 
-  if(not LCamposSemPreenchar.Trim.IsEmpty)then
-    raise exception.Create('Para realizar a conexão com o banco de dados, os seguintes dados devem ser preenchidos: ' + LCamposSemPreenchar);
+  if not LCamposSemPreenchar.Trim.IsEmpty then
+    raise Exception.Create('Para realizar a conexão com o banco de dados, os seguintes dados devem ser preenchidos: ' + LCamposSemPreenchar);
 end;
 
 end.
