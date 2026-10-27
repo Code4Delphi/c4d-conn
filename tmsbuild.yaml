@@ -1,0 +1,37 @@
+# =====================================================================================================
+# TMS Smart Setup configuration file for product C4D Conn
+# See https://doc.tmssoftware.com/smartsetup/guide/creating-bundles.html#creating-a-tmsbuildyaml-file
+# =====================================================================================================
+# yaml-language-server: $schema=https://raw.githubusercontent.com/tmssoftware/smartsetup/refs/heads/main/tms/example-config/tmsbuild.schema.json
+
+minimum required tmsbuild version: 2.0
+
+# Informacoes gerais do produto. O "id" e o nome usado no "tms install".
+application:
+  id: c4d.conn
+  name: C4D Conn
+  description: Biblioteca Code4Delphi para conexao e consultas com FireDAC (MySQL e SQLite).
+  url: https://github.com/Code4Delphi/c4d-conn
+  vcs protocol: git
+
+supported frameworks:
+  vcl:
+    ide since: delphiseattle
+    platforms:
+      - win32intel
+      - win64intel
+
+# O repositorio nao tem .dpk/.dproj; o pacote C4DConn e gerado pelo Smart Setup (secao abaixo).
+packages:
+  - C4DConn: [runtime, vcl]
+
+package definitions:
+  C4DConn:
+    framework type: VCL
+    description: C4D Conn
+    requires: rtl;vcl;dbrtl;FireDAC;FireDACCommon;FireDACCommonDriver;FireDACMySQLDriver;FireDACSqliteDriver;vclFireDAC
+    files:
+      - source:
+          folder: Src
+          include file mask: '*.pas'
+          recursive: false
