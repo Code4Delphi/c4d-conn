@@ -10,7 +10,7 @@ minimum required tmsbuild version: 2.0
 application:
   id: c4d.conn
   name: C4D Conn
-  description: Biblioteca Code4Delphi para conexao e consultas com FireDAC (MySQL e SQLite).
+  description: C4D Conn is a Delphi library that simplifies database connections, query execution, and the creation of dynamic SQL queries, using Fluent Interface and automatic memory management via interfaces.
   url: https://github.com/Code4Delphi/c4d-conn
   vcs protocol: git
 
