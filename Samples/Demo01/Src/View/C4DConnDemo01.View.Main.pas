@@ -75,6 +75,7 @@ type
     TabSheet3: TTabSheet;
     Memo1: TMemo;
     Button4: TButton;
+    sbtnAtualizar2: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -91,6 +92,7 @@ type
     procedure Button3Click(Sender: TObject);
     procedure btnCriarNovaConexaoClick(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure sbtnAtualizar2Click(Sender: TObject);
   private
     FQueryConsulta: IC4DConnQuery;
 
@@ -206,6 +208,27 @@ begin
   Self.AtivarCadastro;
 end;
 
+procedure TC4DConnDemo01ViewMain.sbtnAtualizar2Click(Sender: TObject);
+begin
+  FQueryConsulta
+    .Clear
+    .Add('select id, nome, ano_nascimento')
+    .Add('from clientes')
+    .AddCond('and nome like :nome')
+    .AddCondParam('nome', '%' + Trim(edtNome.Text) + '%');
+
+  FQueryConsulta
+    .AddCond('and ano_nascimento >= :ano')
+    .AddCondParam('ano', 2000);
+
+  FQueryConsulta
+    .AddOrder('nome')
+    .AddLimit('limit 10')
+    .Open;
+
+  StatusBar1.Panels[1].Text := 'Total de registros: ' + FQueryConsulta.RecordCountStr;
+end;
+
 procedure TC4DConnDemo01ViewMain.sbtnAtualizarClick(Sender: TObject);
 begin
   FQueryConsulta.Text('select *from clientes').Open;
@@ -213,6 +236,10 @@ begin
   StatusBar1.Panels[1].Text := 'Total de registros: ' + FQueryConsulta.RecordCountStr;
 
   {FQueryConsulta.Clear.Add('select *from clientes');
+
+
+
+
 
    FQueryConsulta.DataSet.FieldDefs.Update;
    for i := 0 to FQueryConsulta.DataSet.FieldDefs.Count - 1 do

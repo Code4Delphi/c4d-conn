@@ -3,7 +3,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
   Top = 0
   Caption = 'C4DConnDemo01ViewMain'
   ClientHeight = 466
-  ClientWidth = 884
+  ClientWidth = 1078
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
   object StatusBar1: TStatusBar
     Left = 0
     Top = 447
-    Width = 884
+    Width = 1078
     Height = 19
     Panels = <
       item
@@ -28,30 +28,33 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
         Text = 'Total registros: 0'
         Width = 50
       end>
+    ExplicitWidth = 884
   end
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 884
+    Width = 1078
     Height = 447
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 884
     object TabSheet1: TTabSheet
       Caption = 'Crud com C4DConn'
       object pnGrid: TPanel
         Left = 0
         Top = 111
-        Width = 876
+        Width = 1070
         Height = 258
         Align = alClient
         BevelOuter = bvNone
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 876
         object DBGrid1: TDBGrid
           Left = 0
           Top = 0
-          Width = 876
+          Width = 1070
           Height = 258
           Align = alClient
           DataSource = DataSource1
@@ -73,11 +76,12 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
       object bBoxDadosCadastrais: TGroupBox
         Left = 0
         Top = 30
-        Width = 876
+        Width = 1070
         Height = 81
         Align = alTop
         Caption = ' Dados cadastrais '
         TabOrder = 1
+        ExplicitWidth = 876
         object Label1: TLabel
           Left = 16
           Top = 24
@@ -193,7 +197,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
         AlignWithMargins = True
         Left = 0
         Top = 0
-        Width = 876
+        Width = 1070
         Height = 30
         Margins.Left = 0
         Margins.Top = 0
@@ -205,6 +209,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
         Padding.Right = 3
         Padding.Bottom = 3
         TabOrder = 2
+        ExplicitWidth = 876
         object Button1: TButton
           Left = 4
           Top = 4
@@ -284,14 +289,15 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
       object Panel2: TPanel
         Left = 0
         Top = 369
-        Width = 876
+        Width = 1070
         Height = 50
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 3
+        ExplicitTop = 367
         object sbtnFechar: TSpeedButton
           AlignWithMargins = True
-          Left = 751
+          Left = 876
           Top = 3
           Width = 124
           Height = 44
@@ -387,6 +393,21 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
           OnClick = sbtnAtualizarClick
           ExplicitTop = 0
         end
+        object sbtnAtualizar2: TSpeedButton
+          AlignWithMargins = True
+          Left = 751
+          Top = 3
+          Width = 124
+          Height = 44
+          Cursor = crHandPoint
+          Margins.Left = 1
+          Margins.Right = 0
+          Align = alLeft
+          Caption = 'Atualizar 2'
+          OnClick = sbtnAtualizar2Click
+          ExplicitLeft = 794
+          ExplicitTop = -5
+        end
       end
     end
     object TabSheet2: TTabSheet
@@ -395,7 +416,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
       object pnBackupRestaurar: TPanel
         Left = 0
         Top = 0
-        Width = 876
+        Width = 1070
         Height = 57
         Margins.Left = 0
         Margins.Top = 0
@@ -569,7 +590,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
       object mmLog: TMemo
         Left = 0
         Top = 57
-        Width = 876
+        Width = 1070
         Height = 362
         Align = alClient
         ScrollBars = ssVertical
@@ -582,7 +603,7 @@ object C4DConnDemo01ViewMain: TC4DConnDemo01ViewMain
       object Memo1: TMemo
         Left = 0
         Top = 0
-        Width = 876
+        Width = 1070
         Height = 419
         Align = alClient
         Lines.Strings = (
