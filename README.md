@@ -1,4 +1,4 @@
-# c4d-conn
+# C4D Conn
 
 Biblioteca Delphi para conexão com banco de dados e execução de consultas usando **FireDAC**, com interface fluente (*fluent interface*) e gerenciamento automático de memória via interfaces.
 
