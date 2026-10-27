@@ -3,9 +3,6 @@
         <ProjectGuid>{6FA0B7A3-C3CC-4B42-901B-9FB5A2A6518E}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="..\pkC4DConn.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="Demo01\C4DConnDemo01.dproj">
             <Dependencies/>
         </Projects>
@@ -17,15 +14,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="pkC4DConn">
-        <MSBuild Projects="..\pkC4DConn.dproj"/>
-    </Target>
-    <Target Name="pkC4DConn:Clean">
-        <MSBuild Projects="..\pkC4DConn.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkC4DConn:Make">
-        <MSBuild Projects="..\pkC4DConn.dproj" Targets="Make"/>
-    </Target>
     <Target Name="C4DConnDemo01">
         <MSBuild Projects="Demo01\C4DConnDemo01.dproj"/>
     </Target>
@@ -36,13 +24,13 @@
         <MSBuild Projects="Demo01\C4DConnDemo01.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkC4DConn;C4DConnDemo01"/>
+        <CallTarget Targets="C4DConnDemo01"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkC4DConn:Clean;C4DConnDemo01:Clean"/>
+        <CallTarget Targets="C4DConnDemo01:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkC4DConn:Make;C4DConnDemo01:Make"/>
+        <CallTarget Targets="C4DConnDemo01:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
