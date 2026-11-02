@@ -23,9 +23,13 @@ Com ela você configura a conexão em poucas linhas, cria queries sem precisar i
 - FireDAC
 - atualmente pode ser usado com MySQL e SQLite
 
-> Os exemplos deste README usam variáveis inline (`var LQuery := ...`), recurso disponível a partir do Delphi 10.3 Rio. Em versões anteriores, declare as variáveis na seção `var` do método.
-
 ## Instalação
+
+### Via Smart Setup
+
+```bash
+tms install c4d.conn
+```
 
 ### Via Boss
 
